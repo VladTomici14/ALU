@@ -1,5 +1,5 @@
 # ALU Project
-
+We're gonna use *SystemVerilog*.
 
 ## Impartire operatii 
 
