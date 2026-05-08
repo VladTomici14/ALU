@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "mshr-h.VerilogHDL",
-        "eirikpre.systemverilog"
+        "eirikpre.systemverilog",
+        "wavetrace.wavetrace"
     ]
 }
