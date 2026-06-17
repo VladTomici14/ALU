@@ -1,4 +1,4 @@
-module tb_alu;
+module tb_alu_top;
 
     // Testbench signals
     logic [7:0] A;
@@ -9,8 +9,8 @@ module tb_alu;
     logic       N;
     logic       V;
 
-    // Instantiate the ALU (Device Under Test)
-    alu_8bit dut (
+    // Instantiate the modular ALU (Device Under Test)
+    alu_8bit_top dut (
         .A(A),
         .B(B),
         .ALU_Sel(ALU_Sel),
@@ -20,13 +20,14 @@ module tb_alu;
         .V(V)
     );
 
-    // Test sequence
+    // Test sequence - mirrors tb_alu.sv so the monolithic and modular
+    // implementations can be checked against the same vectors.
     initial begin
         // Setup waveform dumping for GTKWave
-        $dumpfile("tb_alu.vcd");
-        $dumpvars(0, tb_alu);
+        $dumpfile("tb_alu_top.vcd");
+        $dumpvars(0, tb_alu_top);
 
-        $display("Starting ALU Simulation...");
+        $display("Starting ALU (modular) Simulation...");
         $display("--------------------------------------------------");
         $display(" A    | B    | Sel | Result | Z | N | V | Operation");
         $display("--------------------------------------------------");
@@ -46,6 +47,10 @@ module tb_alu;
         // 2. Multiplication
         A = 8'd10; B = 8'd5; ALU_Sel = 4'b0010; #10;
         $display("%4d | %4d | %b | %6d | %b | %b | %b | Multiplication", A, B, ALU_Sel, Result, Z, N, V);
+
+        // 2. Multiplication (Truncation: 200 * 2 = 400, doesn't fit in 8 bits)
+        A = 8'd200; B = 8'd2; ALU_Sel = 4'b0010; #10;
+        $display("%4d | %4d | %b | %6d | %b | %b | %b | Mult (Truncate)", A, B, ALU_Sel, Result, Z, N, V);
 
         // 3. Division
         A = 8'd100; B = 8'd10; ALU_Sel = 4'b0011; #10;
@@ -77,7 +82,7 @@ module tb_alu;
 
         $display("--------------------------------------------------");
         $display("Simulation Complete.");
-        
+
         $finish; // End simulation
     end
 

@@ -8,8 +8,8 @@ BUILD_DIR := build
 VCD_DIR := sim
 
 # ALU sources
-RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv
-TESTBENCHES := tb_alu
+RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv $(wildcard operations/*.sv)
+TESTBENCHES := tb_alu tb_alu_top
 
 .PHONY: all clean docker
 all: prepare $(TESTBENCHES)
@@ -25,7 +25,7 @@ $(BUILD_DIR)/%.out: %.sv $(RTL_SOURCES) | prepare
 run_%: $(BUILD_DIR)/%.out
 	@echo "Running $(*F)"
 	$(VVP) $< $(VVP_FLAGS) > $(VCD_DIR)/$*.log
-	@if [ -f dump.vcd ]; then mv dump.vcd $(VCD_DIR)/; fi
+	@if [ -f $*.vcd ]; then mv $*.vcd $(VCD_DIR)/; fi
 
 $(TESTBENCHES): %: run_%
 
