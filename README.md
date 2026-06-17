@@ -1,52 +1,71 @@
 # ALU Project
-We're gonna use *SystemVerilog*.
 
-## Impartire operatii 
+We're using **SystemVerilog** with **iverilog v12** for full SystemVerilog support.
 
-Christian 
-- Multiplication
-- Addition
-- Subtraction
+## Team Tasks
 
-Tomici
-- Division 
-- AND
-- OR 
-- XOR
-- LEFT SHIFT
-- RIGHT SHIFT
+- **Addition, Subtraction, Multiplication** (Christian)
+- **Division, AND, OR, XOR, Left Shift, Right Shift** (Tomici)
 
+## Project Structure
 
-## How to run depending 
-
-1. Compile the code 
-```bash
-iverilog -g2012 -o alu_sim alu_8bit.sv tb_alu.sv
+```
+.
+├── alu_8bit.sv          # Main ALU module
+├── alu_8bit_top.sv      # Top module/wrapper
+├── tb_alu.sv            # Testbench
+├── operations/          # Reference operation modules
+├── build/               # Compiled simulation binaries (generated)
+├── sim/                 # Simulation outputs (VCD, logs) (generated)
+├── Makefile             # Build and simulation control
+├── Dockerfile           # Ubuntu 20.04 simulation environment
+└── README.md
 ```
 
-2. Run the simulation 
+## Building and Running
+
+### Using Make
+
 ```bash
-vvp alu_sim
+# Compile and run simulation
+make all
+
+# Run specific testbench
+make tb_alu
+
+# Clean build artifacts
+make clean
 ```
 
-3. View the waveform 
-```bash 
-gtkwave dump.vcd
-```
+### Using Make with Docker
 
-## Running with Docker
-
-To run the simulation in a Docker container:
-
-1. Build the Docker image:
 ```bash
+# Build the Docker image
 docker build -t alu-sim .
-```
 
-2. Run the container:
-```bash
+# Run the container
 docker run --rm alu-sim
 ```
+
+### Manual Compilation (if needed)
+
+```bash
+# Compile the code 
+iverilog -g2012 -o build/alu_sim alu_8bit.sv tb_alu.sv
+
+# Run the simulation 
+vvp build/alu_sim
+
+# View the waveform
+gtkwave sim/dump.vcd
+```
+
+## Output Files
+
+After running `make all`:
+- `build/tb_alu.out` - Compiled simulation executable
+- `sim/tb_alu.log` - Simulation output log
+- `sim/dump.vcd` - GTKWave waveform file
 
 This will compile and run the simulation inside the container. The `dump.vcd` file will be generated in the container, but since it's ephemeral, you might want to mount a volume or copy it out.
 
