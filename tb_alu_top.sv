@@ -72,13 +72,29 @@ module tb_alu_top;
         A = 8'b11110000; B = 8'b11111111; ALU_Sel = 4'b0110; #10;
         $display("%b | %b | %b | %b | %b | %b | %b | XOR", A, B, ALU_Sel, Result, Z, N, V);
 
-        // 7. Left Shift
-        A = 8'b00001111; B = 8'd0; ALU_Sel = 4'b0111; #10;
-        $display("%b | ---- | %b | %b | %b | %b | %b | Left Shift", A, ALU_Sel, Result, Z, N, V);
+        // 7. Left Shift by 3
+        A = 8'b00001111; B = 8'd3; ALU_Sel = 4'b0111; #10;
+        $display("%b | %4d | %b | %b | %b | %b | %b | Left Shift (by 3)", A, B, ALU_Sel, Result, Z, N, V);
 
-        // 8. Right Shift
+        // 7. Left Shift by 0 (no movement)
+        A = 8'b00001111; B = 8'd0; ALU_Sel = 4'b0111; #10;
+        $display("%b | %4d | %b | %b | %b | %b | %b | Left Shift (by 0)", A, B, ALU_Sel, Result, Z, N, V);
+
+        // 7. Left Shift by >= 8 (every bit shifted out -> 0)
+        A = 8'b00001111; B = 8'd9; ALU_Sel = 4'b0111; #10;
+        $display("%b | %4d | %b | %b | %b | %b | %b | Left Shift (B>=8)", A, B, ALU_Sel, Result, Z, N, V);
+
+        // 8. Right Shift by 3
+        A = 8'b11110000; B = 8'd3; ALU_Sel = 4'b1000; #10;
+        $display("%b | %4d | %b | %b | %b | %b | %b | Right Shift (by 3)", A, B, ALU_Sel, Result, Z, N, V);
+
+        // 8. Right Shift by 0 (no movement)
         A = 8'b11110000; B = 8'd0; ALU_Sel = 4'b1000; #10;
-        $display("%b | ---- | %b | %b | %b | %b | %b | Right Shift", A, ALU_Sel, Result, Z, N, V);
+        $display("%b | %4d | %b | %b | %b | %b | %b | Right Shift (by 0)", A, B, ALU_Sel, Result, Z, N, V);
+
+        // 8. Right Shift by exactly 8 (every bit shifted out -> 0)
+        A = 8'b11110000; B = 8'd8; ALU_Sel = 4'b1000; #10;
+        $display("%b | %4d | %b | %b | %b | %b | %b | Right Shift (B==8)", A, B, ALU_Sel, Result, Z, N, V);
 
         $display("--------------------------------------------------");
         $display("Simulation Complete.");
