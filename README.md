@@ -7,6 +7,8 @@ We're using **SystemVerilog** with **iverilog v12** for full SystemVerilog suppo
 - **Addition, Subtraction, Multiplication** (Christian)
 - **Division, AND, OR, XOR, Left Shift, Right Shift** (Tomici)
 
+## In order to run CLI -> ./run_cli.sh - also, update usage on alu_8bit vs alu_8bit_top
+
 ## Project Structure
 
 ```

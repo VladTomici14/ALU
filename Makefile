@@ -11,8 +11,14 @@ VCD_DIR := sim
 RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv $(wildcard operations/*.sv)
 TESTBENCHES := tb_alu tb_alu_top
 
-.PHONY: all clean docker
+.PHONY: all clean docker cli
 all: prepare $(TESTBENCHES)
+
+$(BUILD_DIR)/tb_alu_cli.out: tb_alu_cli.sv $(RTL_SOURCES) | prepare
+	@echo "Compiling $< -> $@"
+	$(IVERILOG) $(IVERILOG_FLAGS) -s tb_alu_cli -o $@ $(RTL_SOURCES) $<
+
+cli: $(BUILD_DIR)/tb_alu_cli.out
 
 prepare:
 	mkdir -p $(BUILD_DIR)
