@@ -2,6 +2,8 @@
 
 We're using **SystemVerilog** with **iverilog v12** for full SystemVerilog support.
 
+The operations are retrieved..
+
 ## Team Tasks
 
 - **Addition, Subtraction, Multiplication** (Christian)
