@@ -28,6 +28,7 @@ echo ""
 echo "=== 8-bit ALU Interactive CLI ==="
 echo "Operations: 1=Add  2=Sub  3=Mult  4=Div  5=AND  6=OR  7=XOR  8=LShift  9=RShift"
 echo "A and B are entered as unsigned 0-255 (for negatives, use the two's complement value, e.g. -1 = 255)."
+echo "Note: Multiplication (3) interprets A and B as signed two's-complement; Result is still the truncated low byte."
 echo "Type 'q' at any prompt to quit."
 echo ""
 

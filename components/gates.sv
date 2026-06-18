@@ -38,6 +38,13 @@ module xor2_gate (input logic a,
 
 endmodule // xor2_gate
 
+module not_gate (input logic a,
+             output logic y
+             );
+   assign y = ~a;
+
+endmodule // not_gate
+
 module xorn_gate #(parameter WIDTH=8)
    (input logic [WIDTH-1:0]  a,
     input logic	      b,

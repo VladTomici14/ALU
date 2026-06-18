@@ -1,17 +1,21 @@
 module alu_8bit_top (
+    input  logic        clk,        // only used by the sequential multiply path
+    input  logic        rst_n,      // only used by the sequential multiply path
+    input  logic        start,      // pulse for one cycle to begin a multiply
     input  logic [7:0] A,          // 8-bit Operand A
     input  logic [7:0] B,          // 8-bit Operand B
     input  logic [3:0] ALU_Sel,    // 4-bit Operation Selector
     output logic [7:0] Result,     // 8-bit Result
     output logic       Z,          // Zero Flag
     output logic       N,          // Negative Flag
-    output logic       V           // Overflow Flag
+    output logic       V,          // Overflow Flag
+    output logic       done        // 1 unless ALU_Sel selects multiply and it's still busy
 );
 
     logic [7:0] add_result, sub_result, mult_result, div_result, and_result, or_result, xor_result, lshift_result, rshift_result;
     logic add_z, add_n, add_c, add_v;
     logic sub_z, sub_n, sub_c, sub_v;
-    logic mult_z, mult_n, mult_v;
+    logic mult_z, mult_n, mult_v, mult_done;
     logic div_z, div_n, div_v;
     logic and_z, and_n, and_v;
     logic or_z, or_n, or_v;
@@ -41,14 +45,18 @@ module alu_8bit_top (
         .V(sub_v)
     );
 
-    // Instantiate Multiplication Module
+    // Instantiate Multiplication Module (sequential - the only operation that needs clk/rst_n/start)
     alu_mult mult_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .start(start),
         .A(A),
         .B(B),
         .Result(mult_result),
         .Z(mult_z),
         .N(mult_n),
-        .V(mult_v)      // truncation-overflow flag, defined by alu_mult itself
+        .V(mult_v),     // signed-truncation-overflow flag, defined by alu_mult itself
+        .done(mult_done)
     );
 
     // Instantiate Division Module
@@ -176,5 +184,7 @@ module alu_8bit_top (
             end
         endcase
     end
+
+    assign done = (ALU_Sel == 4'b0010) ? mult_done : 1'b1;
 
 endmodule
