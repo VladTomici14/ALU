@@ -8,11 +8,17 @@ BUILD_DIR := build
 VCD_DIR := sim
 
 # ALU sources
-RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv
-TESTBENCHES := tb_alu
+RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv $(wildcard operations/*.sv) $(wildcard components/*.sv)
+TESTBENCHES := tb_alu tb_alu_top
 
-.PHONY: all clean docker
+.PHONY: all clean docker cli
 all: prepare $(TESTBENCHES)
+
+$(BUILD_DIR)/tb_alu_cli.out: tb_alu_cli.sv $(RTL_SOURCES) | prepare
+	@echo "Compiling $< -> $@"
+	$(IVERILOG) $(IVERILOG_FLAGS) -s tb_alu_cli -o $@ $(RTL_SOURCES) $<
+
+cli: $(BUILD_DIR)/tb_alu_cli.out
 
 prepare:
 	mkdir -p $(BUILD_DIR)
@@ -25,7 +31,7 @@ $(BUILD_DIR)/%.out: %.sv $(RTL_SOURCES) | prepare
 run_%: $(BUILD_DIR)/%.out
 	@echo "Running $(*F)"
 	$(VVP) $< $(VVP_FLAGS) > $(VCD_DIR)/$*.log
-	@if [ -f dump.vcd ]; then mv dump.vcd $(VCD_DIR)/; fi
+	@if [ -f $*.vcd ]; then mv $*.vcd $(VCD_DIR)/; fi
 
 $(TESTBENCHES): %: run_%
 

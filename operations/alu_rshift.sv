@@ -1,6 +1,6 @@
 module alu_rshift (
     input  logic [7:0] A,          // 8-bit Operand A
-    input  logic [7:0] B,          // 8-bit Shift Amount (unused for fixed 1-bit shift)
+    input  logic [7:0] B,          // 8-bit Shift Amount (A is shifted right by B positions)
     output logic [7:0] Result,     // 8-bit Result
     output logic       Z,          // Zero Flag
     output logic       N,          // Negative Flag
@@ -9,9 +9,12 @@ module alu_rshift (
 
     logic [7:0] rshift_result;
 
-    // Logical Right Shift by 1 Combinational Logic
+    // Logical Right Shift by B Combinational Logic
     always_comb begin
-        rshift_result = A >> 1;
+        if (B >= 8)
+            rshift_result = 8'b0;   // shifting an 8-bit value by 8+ moves every bit out
+        else
+            rshift_result = A >> B;
     end
 
     // Output assignment

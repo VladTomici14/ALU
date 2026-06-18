@@ -23,7 +23,7 @@ module tb_alu;
     // Test sequence
     initial begin
         // Setup waveform dumping for GTKWave
-        $dumpfile("dump.vcd");
+        $dumpfile("tb_alu.vcd");
         $dumpvars(0, tb_alu);
 
         $display("Starting ALU Simulation...");
