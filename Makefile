@@ -8,7 +8,7 @@ BUILD_DIR := build
 VCD_DIR := sim
 
 # ALU sources
-RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv $(wildcard operations/*.sv)
+RTL_SOURCES := alu_8bit.sv alu_8bit_top.sv $(wildcard operations/*.sv) $(wildcard components/*.sv)
 TESTBENCHES := tb_alu tb_alu_top
 
 .PHONY: all clean docker cli
