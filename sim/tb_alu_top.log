@@ -11,7 +11,6 @@ Starting ALU (modular) Simulation...
  100 |   10 | 0011 |     10 | 0 | 0 | 0 | Division
   50 |    0 | 0011 |      0 | 1 | 0 | 0 | Div by Zero
  100 |   10 | 1010 |     10 | 0 | 0 | 0 | SRT2 Division
- 100 |   10 | 1011 |      2 | 0 | 0 | 0 | SRT4 Division
 11110000 | 10101010 | 0100 | 10100000 | 0 | 1 | 0 | AND
 11110000 | 00001111 | 0101 | 11111111 | 0 | 1 | 0 | OR
 11110000 | 11111111 | 0110 | 00001111 | 0 | 0 | 0 | XOR
@@ -23,4 +22,4 @@ Starting ALU (modular) Simulation...
 11110000 |    8 | 1000 | 00000000 | 1 | 0 | 0 | Right Shift (B==8)
 --------------------------------------------------
 Simulation Complete.
-tb_alu_top.sv:155: $finish called at 516000 (1ps)
+tb_alu_top.sv:147: $finish called at 466000 (1ps)

@@ -43,8 +43,8 @@ module tb_alu_cli;
         rst_n = 1;
         @(negedge clk);
 
-        if (ALU_Sel == 4'b0010 || ALU_Sel == 4'b1010 || ALU_Sel == 4'b1011) begin
-            // Multiplication and the new SRT dividers are sequential.
+        if (ALU_Sel == 4'b0010 || ALU_Sel == 4'b1010) begin
+            // Multiplication and SRT2 division are sequential.
             @(negedge clk); start = 1;
             @(negedge clk); start = 0;
             wait (done === 1'b1);

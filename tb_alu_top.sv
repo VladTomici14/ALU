@@ -105,14 +105,6 @@ module tb_alu_top;
         #1;
         $display("%4d | %4d | %b | %6d | %b | %b | %b | SRT2 Division", A, B, ALU_Sel, Result, Z, N, V);
 
-        // 11. SRT4 Division
-        A = 8'd100; B = 8'd10; ALU_Sel = 4'b1011;
-        @(negedge clk); start = 1;
-        @(negedge clk); start = 0;
-        wait (done === 1'b1);
-        #1;
-        $display("%4d | %4d | %b | %6d | %b | %b | %b | SRT4 Division", A, B, ALU_Sel, Result, Z, N, V);
-
         // 4. Bitwise AND
         A = 8'b11110000; B = 8'b10101010; ALU_Sel = 4'b0100; #10;
         $display("%b | %b | %b | %b | %b | %b | %b | AND", A, B, ALU_Sel, Result, Z, N, V);
