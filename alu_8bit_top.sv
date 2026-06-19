@@ -1,7 +1,7 @@
 module alu_8bit_top (
-    input  logic        clk,        // only used by the sequential multiply path
-    input  logic        rst_n,      // only used by the sequential multiply path
-    input  logic        start,      // pulse for one cycle to begin a multiply
+    input  logic        clk,        // only used by the sequential sequential-path operations
+    input  logic        rst_n,      // only used by sequential operations
+    input  logic        start,      // pulse for one cycle to begin a sequential operation
     input  logic [7:0] A,          // 8-bit Operand A
     input  logic [7:0] B,          // 8-bit Operand B
     input  logic [3:0] ALU_Sel,    // 4-bit Operation Selector
@@ -12,11 +12,13 @@ module alu_8bit_top (
     output logic       done        // 1 unless ALU_Sel selects multiply and it's still busy
 );
 
-    logic [7:0] add_result, sub_result, mult_result, div_result, and_result, or_result, xor_result, lshift_result, rshift_result;
+    logic [7:0] add_result, sub_result, mult_result, div_result, div_srt2_result, div_srt4_result, and_result, or_result, xor_result, lshift_result, rshift_result;
     logic add_z, add_n, add_c, add_v;
     logic sub_z, sub_n, sub_c, sub_v;
     logic mult_z, mult_n, mult_v, mult_done;
     logic div_z, div_n, div_v;
+    logic div_srt2_z, div_srt2_n, div_srt2_v, div_srt2_done;
+    logic div_srt4_z, div_srt4_n, div_srt4_v, div_srt4_done;
     logic and_z, and_n, and_v;
     logic or_z, or_n, or_v;
     logic xor_z, xor_n, xor_v;
@@ -67,6 +69,34 @@ module alu_8bit_top (
         .Z(div_z),
         .N(div_n),
         .V(div_v)
+    );
+
+    // Instantiate SRT2 Division Module
+    alu_div_srt2 div_srt2_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .start(start && (ALU_Sel == 4'b1010)),
+        .A(A),
+        .B(B),
+        .Result(div_srt2_result),
+        .Z(div_srt2_z),
+        .N(div_srt2_n),
+        .V(div_srt2_v),
+        .done(div_srt2_done)
+    );
+
+    // Instantiate SRT4 Division Module
+    alu_div_srt4 div_srt4_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .start(start && (ALU_Sel == 4'b1011)),
+        .A(A),
+        .B(B),
+        .Result(div_srt4_result),
+        .Z(div_srt4_z),
+        .N(div_srt4_n),
+        .V(div_srt4_v),
+        .done(div_srt4_done)
     );
 
     // Instantiate AND Module
@@ -146,6 +176,18 @@ module alu_8bit_top (
                 N = div_n;
                 V = div_v;
             end
+            4'b1010: begin
+                Result = div_srt2_result;
+                Z = div_srt2_z;
+                N = div_srt2_n;
+                V = div_srt2_v;
+            end
+            4'b1011: begin
+                Result = div_srt4_result;
+                Z = div_srt4_z;
+                N = div_srt4_n;
+                V = div_srt4_v;
+            end
             4'b0100: begin
                 Result = and_result;
                 Z = and_z;
@@ -185,6 +227,8 @@ module alu_8bit_top (
         endcase
     end
 
-    assign done = (ALU_Sel == 4'b0010) ? mult_done : 1'b1;
+    assign done = (ALU_Sel == 4'b0010) ? mult_done :
+                  (ALU_Sel == 4'b1010) ? div_srt2_done :
+                  (ALU_Sel == 4'b1011) ? div_srt4_done : 1'b1;
 
 endmodule
